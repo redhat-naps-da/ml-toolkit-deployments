@@ -1,6 +1,8 @@
 # Install Kubeflow on OCP with RH Service Mesh
 Goal install KubeFlow on OpenShift with Red Hat Service Mesh using previously commited changes.
 
+![image](images/kf-on-ocp.png)
+
 Very detailed sources that set the premise of this article.
 1. [Installing Kubeflow v0.7 on OpenShift 4.2](https://developers.redhat.com/blog/2020/02/10/installing-kubeflow-v0-7-on-openshift-4-2/)
 1. [Integrating Kubeflow with Red Hat OpenShift Service Mesh](https://developers.redhat.com/blog/2020/04/24/integrating-kubeflow-with-red-hat-openshift-service-mesh/)
