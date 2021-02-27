@@ -1,9 +1,12 @@
 # Install ODH v1.0 on OCP 4.6 running Service Mesh 2.0
-
-## Deploy ODH Operator with KfDef variations
+Ultimately, you can install all 3 ODH deployments side-by-side on the same cluster in different projects. All the steps below can be done from the OCP web UI without.
+## Prerequiremets
+1. a running clusters (CRC or full OCP)
+1. cluster admin
+# Deploy ODH Operator with KfDef variations
 You have [3 provided ODH kfdef files](https://github.com/opendatahub-io/odh-manifests/tree/master/kfdef) that provide deployment variations for OpenShift compared to a [Kubeflow KfDef](https://github.com/kubeflow/manifests/blob/v1.2-branch/kfdef/kfctl_istio_dex.v1.2.0.yaml):
 
-|Function|kfdef|kfctl_openshift|kfctl_openshift_distributed_training|kfctl_openshift_kubeflow_monitoring|a kubeflow kfdef|
+|Function|kfdef|kfctl_openshift|kfctl_openshift distributed_training|kfctl_openshift kubeflow_monitoring|a kubeflow kfdef|
 |-|-|-|-|-|-|
 |||||||
 |Home|ODH Dashboard|x|x|||
@@ -29,14 +32,15 @@ You have [3 provided ODH kfdef files](https://github.com/opendatahub-io/odh-mani
 |Pipeline Artifacts|MySQL|||x|x|
 |Pod Security|OCP Security Context Constraints|||x||
 |Networking|Istio Service Mesh|||x|x|
+|Networking|Webhook||||x|
 |Authn & Authz|Dex OIDC||||x|
 |Isolation|KF Roles||||x|
-|Networking|Webhook||||x|
+|Isolation|Profiles|||x|x|
 |Security|Certificate Manager|||x|x|
 |Model Tracking|Metadata|||x|x|
 |Scheduling|Scheduledworkflow|||x|x|
-|Isolation|Profiles|||x|x|
 
+> This table just illustrates what the KfDef files currently include. 
 # Install Operators
 1. From OpenShift Web Interface
 1. From OpenShift Operators > OperatorHub
@@ -66,6 +70,8 @@ You have [3 provided ODH kfdef files](https://github.com/opendatahub-io/odh-mani
 1. Click Create ServiceMeshMemberRoll
 1. Select YAML View
 1. Update spec members to inlude your ODH Project created previously
+
+> Still need to verify ODH and service mesh sidecar injection. Currently, KF deployments will inject some deployments by default.
 
 # Deploy kfctl_openshift
 
