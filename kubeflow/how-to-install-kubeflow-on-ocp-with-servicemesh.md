@@ -48,6 +48,14 @@ Once SMCP comples successfully, **create a Istio Service Mesh Member Roll** in t
 
 # Prepare for the deployment
 
+Ill cover two approaches based on different skillsets: 1) deploy using the ODH operator 2) deploy using the terminal.
+
+## Option 1: Deploy using the ODH Operator
+
+
+
+## Option 2: Deploy using the terminal
+
 Switch to a terminal and log into the OCP cluster to deploy the Kubeflow tools. You will need to install 2 tools (oc and kfctl), download and edit a Kubeflow manifest. For this part of the session, a [RHEL 8.3 host cockpit terminal session](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_systems_using_the_rhel_8_web_console/getting-started-with-the-rhel-8-web-console_system-management-using-the-rhel-8-web-console) was used, which offers a lot of other advanced capabilities.
 
 **Download, install and move the oc command line tool into your path.** With the OpenShift command line interface, you can create applications and manage OpenShift projects from a terminal. Detailed steps can be found here: https://docs.openshift.com/container-platform/4.6/cli_reference/openshift_cli/getting-started-cli.html. **Log into the cluster using the oc login command.**  
