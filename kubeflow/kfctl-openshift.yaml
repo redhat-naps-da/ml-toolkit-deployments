@@ -11,6 +11,15 @@ spec:
         name: manifests
         path: openshift/openshift-scc
     name: openshift-scc
+  # This component is the istio resources for Kubeflow (e.g. gateway), not about installing istio.
+  - kustomizeConfig:
+      parameters:
+      - name: clusterRbacConfig
+        value: "OFF"
+      repoRef:
+        name: manifests
+        path: istio/istio
+    name: istio
   - kustomizeConfig:
       overlays:
       - istio
