@@ -11,6 +11,7 @@ If you're looking to run a robust machine learning toolkit on an enterprise-clas
 1. Observe service mesh
 1. Uninstall Kubeflow
 
+This procedure was testing on: OpenShift version: 4.5, 4.6, 4.7
 # Install Operators
 
 ![image](images/installed-operators.png)
@@ -70,7 +71,9 @@ Switch to the istio-system project and go to Installed Operators. Select the Ist
 - Name = `basic`
 - Control Plane Version = `v2.0`
 - Security > Control Plane Security = `True` to [enable mTLS](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.6/html-single/service_mesh/index#ossm-security-mtls_ossm-security)
-- Proxy > Injection > Auto Inject = `True` to ensure [auto inject envoy](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.6/html-single/service_mesh/index#ossm-sidecar-injection_deploying-applications-ossm)
+- Security > Data Plane > Data Plane Security = `True` to enable mTLS
+- Security > Data Plane > Automtls = `True`
+- Proxy > Injection > Auto Inject = `True` to [auto inject envoy](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.6/html-single/service_mesh/index#ossm-sidecar-injection_deploying-applications-ossm)
 
 Wait for the SMCP basic status to display Conditions: Installed, Reconciled, Ready. Resource creation can take a few minutes, so monitoring the control plane resources can help identify issues early.
 
@@ -110,20 +113,20 @@ If you are unfamiliar with the raw.githubusercontent... url it is from clicking 
 |step|sample linux command|
 |-|-|
 |download the manifest|`wget https://raw.githubusercontent.com/redhat-naps-da/ml-toolkit-deployments/main/kubeflow/with-servicemesh/kfctl-openshift.yaml`|
-|review the file|`vim kfctl_openshift_servicemesh.yaml`|
+|review the file|`vim kfctl-openshift.yaml`|
 
-**Apply the Kubeflow manifest.**  This will fetch the configurations from the github repo, create a local .cache manifest and kustomize directory for each of the included application entries from the KfDef. **It will likely error**...but we can fix it.
+**Apply the Kubeflow manifest.**  This will fetch the configurations from the github repo, create a local `.cache` directory and `kustomize` directory for each of the included application entries from the KfDef. **It will likely error**...but we can fix it.
 
 |step|sample linux command|
 |-|-|
 |deploy in kubeflow project|`oc project kubeflow`|
-|apply the manifest (expect error)|`kfctl apply -f kfctl_openshift_servicemesh.yaml -V`|
+|apply the manifest (expect error)|`kfctl apply -f kfctl-openshift.yaml -V`|
 
 ***Fixing the error***
 
-You will likely hit this error that is reporting two issues: 
+If you hit this error it is reporting two issues because we are deploying Service Mesh 2.0: 
 1. `sni_hosts` was replaced with `sniHosts` in istio 1.6 so we need to change it.
-1. comment out the ClusterRbacConfig block entirely. 
+1. comment out the `ClusterRbacConfig block` entirely. 
 ```
 WARN[0009] Encountered error applying application istio:  (kubeflow.error): Code 500 with message: Apply.Run : [error when creating "/tmp/kout121275116": admission webhook "validation.istio.io" denied the request: configuration is invalid: TLS match must have at least one SNI host, unable to recognize "/tmp/kout121275116": no matches for kind "ClusterRbacConfig" in version "rbac.istio.io/v1alpha1"]  filename="kustomize/kustomize.go:284"
 ```
@@ -143,7 +146,7 @@ If you want to make more changes you should clone the entire manifest repo, poin
 |step|sample linux command|
 |-|-|
 |deploy in kubeflow project|`oc project kubeflow`|
-|apply the manifest|`kfctl apply -f kfctl_openshift_servicemesh.yaml -V`|
+|apply the manifest|`kfctl apply -f kfctl-openshift.yaml -V`|
 
 ![image](images/kfctl-progress.png)
 
@@ -151,8 +154,9 @@ The Developer perspective offers a visual topology to visualize the deployment.
 
 Keep the three artifacts (.cache/, kfctl_openshift.yaml, kustomize/) to modify or delete the deployment. Wait for the apply command to complete and log a message `Applied the configuration Successfully!`.
 
-**Get the route to the Kubeflow Central Dashboard.** 1. You can get the url from the CLI 
-1. Go to istio-system project > Networking > Routes and click on the ingress-gateway or kubeflow route. 
+**Get the route to the Kubeflow Central Dashboard.** 
+1. You can get the url from the CLI using the oc command below
+1. You can get the url from the console, go to istio-system project > Networking > Routes and click on the `istio-ingressgateway` or kubeflow route. 
 
 ![image](images/kubeflow-dash.png)
 
@@ -160,7 +164,27 @@ Keep the three artifacts (.cache/, kfctl_openshift.yaml, kustomize/) to modify o
 |-|-|
 |get route to paste in browser|`oc get routes -n istio-system istio-ingressgateway -o jsonpath='http://{.spec.host}/'`|
 
-IMPORTANT: Remember to append and save any new namespaces to the istio-system project ServiceMeshMemberRoll in order for the correct route to be created (e.g. Notebooks).
+**Start using Kubeflow**
+
+In order to use Kubeflow, a namespace for your account must be created. Follow the steps to get started and create a namespace.
+
+![image](images/kubeflow-project.png)
+
+1. Click `Notebook Servers`
+1. Click `+ New Server`
+1. Enter a name `firstnotebook`
+1. Click `Create`
+1. Wait for the notebook to complete
+
+![image](images/update-members.png)
+
+1. from your console go to istio-system project > Install Operators > Istio Service Mesh Member Roll YAML view
+1. append the `newproject` to the members
+1. Click `Save`
+
+Connect to your new notebook
+
+IMPORTANT: Remember to append and save any new namespaces to the istio-system project ServiceMeshMemberRoll in order for the correct route to be created (e.g. when creating Notebooks.
 
 ![image](images/add-members.png)
 # Observe service mesh
