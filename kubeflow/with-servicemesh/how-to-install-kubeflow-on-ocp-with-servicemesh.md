@@ -151,7 +151,8 @@ The Developer perspective offers a visual topology to visualize the deployment.
 
 Keep the three artifacts (.cache/, kfctl_openshift.yaml, kustomize/) to modify or delete the deployment. Wait for the apply command to complete and log a message `Applied the configuration Successfully!`.
 
-**Get the route to the Kubeflow Central Dashboard.** You can get the url from the CLI or from the Web UI to access the Kubeflow Dashboard. After the register process and creating a namespace, you will see a similar dashboard below.
+**Get the route to the Kubeflow Central Dashboard.** 1. You can get the url from the CLI 
+1. Go to istio-system project > Networking > Routes and click on the ingress-gateway or kubeflow route. 
 
 ![image](images/kubeflow-dash.png)
 
@@ -159,6 +160,9 @@ Keep the three artifacts (.cache/, kfctl_openshift.yaml, kustomize/) to modify o
 |-|-|
 |get route to paste in browser|`oc get routes -n istio-system istio-ingressgateway -o jsonpath='http://{.spec.host}/'`|
 
+IMPORTANT: Remember to append and save any new namespaces to the istio-system project ServiceMeshMemberRoll in order for the correct route to be created (e.g. Notebooks).
+
+![image](images/add-members.png)
 # Observe service mesh
 
 You can access Kiali and Jaeger to better understand you service mesh and perform data tracing by clicking on the Open URL route arrows on the services.
