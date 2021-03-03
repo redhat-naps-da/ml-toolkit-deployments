@@ -103,15 +103,14 @@ For this part of the procedure, a [RHEL 8.3 host cockpit terminal session](https
 |login as a cluster admin|`oc login --token=<enter-token> --server=https://api.<enter-cluster>.com:6443`|
 
 **Download a copy of a Kubeflow KfDef manifest.** 
-If you are unfamiliar with the raw.githubusercontent... url it is from clicking the raw button on this page https://github.com/opendatahub-io/manifests/blob/v1.0-branch-openshift/kfdef/kfctl_openshift.yaml.
+If you are unfamiliar with the raw.githubusercontent... url it is from clicking the [raw button on file](https://github.com/redhat-naps-da/ml-toolkit-deployments/blob/main/kubeflow/with-servicemesh/kfctl-openshift.yaml).
 
 ![image](images/deploy-cmds.png)
 
 |step|sample linux command|
 |-|-|
-|download the manifest|`wget https://raw.githubusercontent.com/opendatahub-io/manifests/v1.0-branch-openshift/kfdef/kfctl_openshift.yaml`|
+|download the manifest|`wget https://raw.githubusercontent.com/redhat-naps-da/ml-toolkit-deployments/main/kubeflow/with-servicemesh/kfctl-openshift.yaml`|
 |review the file|`vim kfctl_openshift_servicemesh.yaml`|
-|remove components|<p>`istio-crds`<br>`istio-install`<br>`metacontroller`<br>`kubeflow-roles`<br>`bootstrap`<br>`webhook`<br>`knative`<br>`knative-install`<br>`kfserving-crds`<br>`kfserving-install`</p>|
 
 **Apply the Kubeflow manifest.**  This will fetch the configurations from the github repo, create a local .cache manifest and kustomize directory for each of the included application entries from the KfDef. **It will likely error**...but we can fix it.
 
