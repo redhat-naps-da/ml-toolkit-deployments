@@ -1,19 +1,21 @@
 # How to install Kubeflow v1.2 on OpenShift using the Operator
 
-The latest release of Kubeflow incorporates new changes to the configuration files structure, or stacks, that ultimately organize files into distribution-specific manifests for platforms like OpenShift. If you are interested in the details here is the source (Pull Request)[https://github.com/kubeflow/manifests/pull/1739]. 
+The latest release of Kubeflow incorporates new changes to the configuration files structure, or stacks, that ultimately organize files into distribution-specific manifests for platforms like OpenShift. If you are interested in the details here is the source [Pull Request](https://github.com/kubeflow/manifests/pull/1739). 
 
-The goal of this post is to peform a default install of Kubeflow v1.2 on Red Hat OpenShift v4.7 using the Open Data Hub Operator v1.0 from the OpenShift web console. Screen shots will follow steps to be performed.
+The goal of this post is to perform a default install of Kubeflow v1.2 on Red Hat OpenShift v4.7 using the Open Data Hub Operator v1.0 from the OpenShift web console. Screen shots will follow steps.
 
 ## Major Steps
 1. Log into OpenShift web console with admin user
 1. Install the Open Data Hub Operator
-1. Create a new project `kubeflow`
-1. Copy and Paste the (kfctl_openshift.v1.2.0.yaml)[https://raw.githubusercontent.com/kubeflow/manifests/master/distributions/kfdef/kfctl_openshift.v1.2.0.yaml] manifest into the Operator KfDef YAML View
+1. Create `kubeflow` project
+1. Install Kubeflow
+1. Monitor the Install
+1. Access Kubeflow UI
 
 ## Pre-requirements
 1. MUST have cluster admin privileges
-1. SHOULD NOT have an (existing istio service mesh)[https://istio.io/latest/docs/ops/deployment/deployment-models/#multiple-meshes] or name collisions will occur
-1. MUST NOT have an existing project name istio-system as kubeflow will install istio service mesh
+1. SHOULD NOT have an [existing istio service mesh](https://istio.io/latest/docs/ops/deployment/deployment-models/#multiple-meshes) or name collisions will occur
+1. MUST NOT have an existing project named istio-system as kubeflow will install istio service mesh
 1. MUST NOT have remaining mutatingwebhooks NOR validatingwebhooks from prior installation or installation will fail
 1. MUST NOT deploy kubeflow in a project or namespace other than kubeflow or the deployment will fail
 
@@ -37,7 +39,7 @@ From the Administrator perspective:
 ![odh install operator](./images/odh-install.png)
 
 # Create Kubeflow project
-At this time, installing kubeflow MUST be done in a namespace called 'kubeflow. This is an (open issue)[https://github.com/kubeflow/kubeflow/issues/5647] at the time of this writing.
+At this time, installing kubeflow MUST be done in a namespace called 'kubeflow. This is an [open issue](https://github.com/kubeflow/kubeflow/issues/5647) at the time of this writing.
 
 ## Steps
 From the Administrator perspective:
@@ -46,7 +48,7 @@ From the Administrator perspective:
 1. Enter values:
    - Name = `kubeflow` (this must be kubeflow)
    - Display Name = `kubeflow` (this can be anything)
-   - Description = `Kubeflow ML toolkit' (this can be anything)
+   - Description = `Kubeflow ML toolkit` (this can be anything)
 1. Change to the Project = `kubeflow`
 1. Go to Operators > Installed Operators
 1. Wait for the Operator to display Status = `Succeeded`
@@ -105,13 +107,13 @@ Once you complete the registration process and create a namespace, you will see 
 # What Next
 From here you can create a notebook, start pipeline and experiments, etc.
 
-# How to uninstall
+# Uninstall Kubeflow
 
 ## Steps
 From the Adminstrator perspective:
 1. From the Project = `kubeflow`
 1. Go to Operators > Installed Operators
 1. Select the Open Data Hub Operator > Click `Open Data Hub` Menu item
-1. Click the Kebab button (the one with 3 vertical dots) > `Delete KfDef` to begin the delete process
-1. You can delete the kubeflow and istio-system project as needed
-1. You may have mutatingwehooks that are deleted by the operator as they are not owned by the resource that you can [delete from the CLI](https://www.kubeflow.org/docs/openshift/uninstall-kubeflow/).
+1. Click the Kebab button (the one with 3 vertical dots) > `Delete KfDef` to begin the delete process for Kubeflow
+1. You can delete the `kubeflow` and `istio-system` projects as needed
+1. You may have mutatingwehooks that are deleted by the operator as they are not owned by the resource that you can [delete from the CLI](https://www.kubeflow.org/docs/openshift/uninstall-kubeflow/)
