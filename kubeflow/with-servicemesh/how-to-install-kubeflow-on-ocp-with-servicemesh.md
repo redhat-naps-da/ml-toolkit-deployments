@@ -1,13 +1,12 @@
 # How to install Kubeflow v1 on OpenShift v4.6 with Service Mesh v2
 
-If you're looking to run a robust machine learning toolkit on an enterprise-class Kubernetes distribution with a microservice network, you came to the right article. This post builds upon the deployment path of earlier software versions [Integrating Kubeflow with Red Hat OpenShift Service Mesh](https://developers.redhat.com/blog/2020/04/24/integrating-kubeflow-with-red-hat-openshift-service-mesh/) with some tweaks along the way for current versions. This process utilizes both the web console and the command line to perform the installation:
-
+If you're looking to run a robust machine learning toolkit on an enterprise-class Kubernetes distribution with a microservice network, you came to the right article. This post is more of a procedure that builds upon posts from earlier software versions [Integrating Kubeflow with Red Hat OpenShift Service Mesh](https://developers.redhat.com/blog/2020/04/24/integrating-kubeflow-with-red-hat-openshift-service-mesh/) with some tweaks along the way for current versions. This process utilizes both the web console and the command line to perform the installation:
 ## Overview of the procedure
 1. Install Operators 
 1. Create Projects
 1. Configure Service Mesh 
 1. Install Kubeflow
-1. Customise a configuration 
+1. Patch a configuration 
 1. Observe service mesh
 1. Uninstall Kubeflow
 
@@ -18,36 +17,15 @@ This procedure was testing on: OpenShift version: 4.5, 4.6, 4.7
 
 As an admin from your OpenShift OperatorHub, you need to install this sequence of 4 Red Hat operators: Elasticsearch, OpenShift Jaeger, Kiali and Red Hat Service Mesh.
 
-First, **install the OpenShift Elasticsearch Operator provided by Red Hat** for configuring and managing an Elasticsearch cluster for use in tracing and cluster logging as well as a Kibana instance to connect to it. 
-- Accept defaults for Update Channel
-- Installation Mode across all namespaces
-- Recommended openshift-operators-redhat namespace
-- Automatic Approval Strategy. 
+For all of the operator installations, accept defaults and wait for Install Operator status to display Succeeded before continuing.
 
-Wait for the Installed Operators status to display Succeeded before continuing.
+First, **install the OpenShift Elasticsearch Operator provided by Red Hat** for configuring and managing an Elasticsearch cluster for use in tracing and cluster logging as well as a Kibana instance to connect to it. 
 
 Second, **install the Red Hat OpenShift Jaeger Operator** for monitoring and troubleshooting microservices-based distributed systems. We are intending to deploy an Elasticsearch cluster via the Jaeger custom resource, so the Elasticsearch Operator must first be installed. 
-- Accept defaults for Stable Update Channel - Installation Mode across all namespaces
-- Recommended openshift-operators namespace
-- Automatic Approval Strategy. 
-
-Wait for the Installed Operators status to display Succeeded before continuing.
 
 Third, install the **Kiali Operator provided by Red Hat** to visualize insights about the mesh components at different levels. 
-- Accept defaults for Stable Update Channel 
-- Installation Mode across all namespaces
-- Recommended openshift-operators namespace
-- Automatic Approval Strategy. 
-
-Wait for the Installed Operators status to display Succeeded before continuing.
 
 Last, install the **Red Hat OpenShift Service Mesh Operator**, based on the open source Istio project, adds a transparent layer on existing distributed applications without requiring any changes to the service code. Once an instance of Red Hat OpenShift Service Mesh has been installed, it will only exercise control over services within its own project. 
-- Accept defaults for Stable Update Channel
-- Installation Mode across all namespaces
-- Recommended openshift-operators namespace
-- Automatic Approval Strategy. 
-
-Wait for the Installed Operators status to display Succeeded before continuing. 
 
 # Create Projects
 
@@ -71,8 +49,6 @@ Switch to the istio-system project and go to Installed Operators. Select the Ist
 - Name = `basic`
 - Control Plane Version = `v2.0`
 - Security > Control Plane Security = `True` to [enable mTLS](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.6/html-single/service_mesh/index#ossm-security-mtls_ossm-security)
-- Security > Data Plane > Data Plane Security = `True` to enable mTLS
-- Security > Data Plane > Automtls = `True`
 - Proxy > Injection > Auto Inject = `True` to [auto inject envoy](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.6/html-single/service_mesh/index#ossm-sidecar-injection_deploying-applications-ossm)
 
 Wait for the SMCP basic status to display Conditions: Installed, Reconciled, Ready. Resource creation can take a few minutes, so monitoring the control plane resources can help identify issues early.
@@ -122,7 +98,7 @@ If you are unfamiliar with the raw.githubusercontent... url it is from clicking 
 |deploy in kubeflow project|`oc project kubeflow`|
 |apply the manifest (expect error)|`kfctl apply -f kfctl-openshift.yaml -V`|
 
-***Fixing the error***
+***Patch the manifest for Service Mesh 2.0***
 
 If you hit this error it is reporting two issues because we are deploying Service Mesh 2.0: 
 1. `sni_hosts` was replaced with `sniHosts` in istio 1.6 so we need to change it.
@@ -131,13 +107,13 @@ If you hit this error it is reporting two issues because we are deploying Servic
 WARN[0009] Encountered error applying application istio:  (kubeflow.error): Code 500 with message: Apply.Run : [error when creating "/tmp/kout121275116": admission webhook "validation.istio.io" denied the request: configuration is invalid: TLS match must have at least one SNI host, unable to recognize "/tmp/kout121275116": no matches for kind "ClusterRbacConfig" in version "rbac.istio.io/v1alpha1"]  filename="kustomize/kustomize.go:284"
 ```
 
-****Edit the kf-istio-resources.yaml****
+****Patch the kf-istio-resources.yaml****
+Because we are using Service Mesh 2.0, we need to remove some unsupported features from 1.0.
+
 |step|sample linux command|
 |-|-|
-|edit the kf-istio-resources|`vim kustomize/istio/base/kf-istio-resources.yaml`|
-|line 63|replace `sni_hosts` with `sniHosts`|
-|line 96|replace `sni_hosts` with `sniHosts`|
-|lines 104-110|delete|
+|replace `sni_hosts` with `sniHosts` that occur in lines 63 & 96|`sed -i '/s/sni_hosts/sniHosts/g' ./kustomize/istio/base/kf-istio-resources.yaml`
+|delete lines 104-110|`sed -i '104,110d' ./kustomize/istio/base/kf-istio-resources.yaml`|
 
 If you want to make more changes you should clone the entire manifest repo, point the KfDef uri to your now local manifest, and run a kfctl build -f kfctl_openshift.yaml prior to the apply. 
 
@@ -145,8 +121,8 @@ If you want to make more changes you should clone the entire manifest repo, poin
 
 |step|sample linux command|
 |-|-|
-|deploy in kubeflow project|`oc project kubeflow`|
 |apply the manifest|`kfctl apply -f kfctl-openshift.yaml -V`|
+|check the virtual services|`oc get virtualservices -n kuebflow`|
 
 ![image](images/kfctl-progress.png)
 
@@ -158,7 +134,7 @@ Keep the three artifacts (.cache/, kfctl_openshift.yaml, kustomize/) to modify o
 1. You can get the url from the CLI using the oc command below
 1. You can get the url from the console, go to istio-system project > Networking > Routes and click on the `istio-ingressgateway` or kubeflow route. 
 
-![image](images/kubeflow-dash.png)
+![image](images/kubeflow-project.png)
 
 |step|sample linux command|
 |-|-|
@@ -166,27 +142,14 @@ Keep the three artifacts (.cache/, kfctl_openshift.yaml, kustomize/) to modify o
 
 **Start using Kubeflow**
 
-In order to use Kubeflow, a namespace for your account must be created. Follow the steps to get started and create a namespace.
+In order to use Kubeflow, you are prompted to create a namespace. The namespace you create is reflected as a new project on the cluster. You have to update the new project/namespace in the previously created ServiceMeshMemberRoll manually. We're working on automating this process.
 
-![image](images/kubeflow-project.png)
-
-1. Click `Notebook Servers`
-1. Click `+ New Server`
-1. Enter a name `firstnotebook`
-1. Click `Create`
-1. Wait for the notebook to complete
-
-![image](images/update-members.png)
-
-1. from your console go to istio-system project > Install Operators > Istio Service Mesh Member Roll YAML view
+From your web console:
+1. Go to istio-system project > Installed Operators > Istio Service Mesh Member Roll YAML view
 1. append the `newproject` to the members
 1. Click `Save`
 
-Connect to your new notebook
-
-IMPORTANT: Remember to append and save any new namespaces to the istio-system project ServiceMeshMemberRoll in order for the correct route to be created (e.g. when creating Notebooks.
-
-![image](images/add-members.png)
+![image](images/update-members.png)
 # Observe service mesh
 
 You can access Kiali and Jaeger to better understand you service mesh and perform data tracing by clicking on the Open URL route arrows on the services.
@@ -202,7 +165,9 @@ No good procedure is ever complete without a way to undo it, make modifications 
 |step|sample linux command|
 |-|-|
 |login as a cluster admin|`oc login --token=<enter-token> --server=https://api.<enter-cluster>.com:6443`|
-|delete the deployment|`kfctl delete -f kfctl_openshift_servicemesh.yaml -V`|
+|delete the deployment|`kfctl delete -f kfctl-openshift.yaml -V`|
 |delete mutating webhooks|`oc delete mutatingwebhookconfigurations.admissionregistration.k8s.io --all`|
 |delete validating webhooks|`oc delete validatingwebhookconfigurations.admissionregistration.k8s.io --all`|
 |remove the generated folders|`rm -rf {kustomize,.cache}`|
+
+Special thanks to my peers that helped with this article: Ryan Kraus, James Harmison, Bob Kozdemba
