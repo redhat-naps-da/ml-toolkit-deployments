@@ -1,0 +1,758 @@
+[dmarcus-redhat.com@bastion ~]$ kfctl apply -f kfctl_openshift.v1.2.0.yaml -V | tee /tmp/kf-install-log-$(date)
+INFO[0000] Creating directory .cache                     filename="kfconfig/types.go:450"
+INFO[0000] Fetching https://github.com/kubeflow/manifests/archive/v1.2-branch.tar.gz to .cache/manifests  filename="kfconfig/types.go:498"
+INFO[0001] Updating localPath to .cache/manifests/manifests-1.2-branch  filename="kfconfig/types.go:569"
+INFO[0001] Fetch succeeded; LocalPath .cache/manifests/manifests-1.2-branch  filename="kfconfig/types.go:590"
+INFO[0001] Processing application: openshift-scc         filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/openshift-scc       filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: istio-stack           filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/istio-stack         filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: istio                 filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/istio               filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: application           filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/application         filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: metacontroller        filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/metacontroller      filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: cert-manager-crds     filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/cert-manager-crds   filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: cert-manager-kube-system-resources  filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/cert-manager-kube-system-resources  filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: cert-manager          filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/cert-manager        filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: argo                  filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/argo                filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: jupyter-web-app       filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/jupyter-web-app     filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: notebook-controller   filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/notebook-controller  filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: metadata              filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/metadata            filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: tf-job                filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/tf-job              filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: pytorch-job           filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/pytorch-job         filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: katib                 filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/katib               filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: pipeline              filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/pipeline            filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: seldon                filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/seldon              filename="kustomize/kustomize.go:667"
+INFO[0001] Processing application: kubeflow-apps         filename="kustomize/kustomize.go:569"
+INFO[0001] Creating folder kustomize/kubeflow-apps       filename="kustomize/kustomize.go:667"
+INFO[0001] .cache/manifests exists; not resyncing        filename="kfconfig/types.go:473"
+INFO[0001] namespace: kubeflow                           filename="utils/k8utils.go:433"
+INFO[0001] Labeling Namespace: kubeflow                  filename="utils/k8utils.go:420"
+INFO[0001] Labeling Namespace: kubeflow                  filename="utils/k8utils.go:420"
+INFO[0001] Log cluster name into KfDef: api-cluster-8a73-8a73-example-opentlc-com:6443  filename="kustomize/kustomize.go:253"
+INFO[0001] Deploying application openshift-scc           filename="kustomize/kustomize.go:266"
+configmap/scc-namespace-check-5b8mdc7488 created
+securitycontextconstraints.security.openshift.io/kubeflow-anyuid-istio created
+securitycontextconstraints.security.openshift.io/kubeflow-anyuid-kubeflow created
+INFO[0002] Successfully applied application openshift-scc  filename="kustomize/kustomize.go:291"
+INFO[0002] Deploying application istio-stack             filename="kustomize/kustomize.go:266"
+namespace/istio-system created
+secret/kiali created
+configmap/istio-grafana-configuration-dashboards-mixer-dashboard created
+configmap/istio-grafana-configuration-dashboards-galley-dashboard created
+configmap/istio-grafana-configuration-dashboards-istio-mesh-dashboard created
+configmap/istio-grafana-configuration-dashboards-istio-performance-dashboard created
+configmap/istio-grafana-configuration-dashboards-istio-service-dashboard created
+configmap/istio-grafana-configuration-dashboards-istio-workload-dashboard created
+configmap/istio-grafana created
+configmap/istio-grafana-configuration-dashboards-pilot-dashboard created
+configmap/istio-galley-configuration created
+configmap/istio-grafana-custom-resources created
+configmap/istio-security-custom-resources created
+configmap/istio-sidecar-injector created
+configmap/kiali created
+configmap/prometheus created
+configmap/istio created
+serviceaccount/kiali-service-account created
+serviceaccount/istio-security-post-install-account created
+serviceaccount/istio-pilot-service-account created
+serviceaccount/istio-multi created
+serviceaccount/istio-mixer-service-account created
+serviceaccount/istio-ingressgateway-service-account created
+serviceaccount/istio-sidecar-injector-service-account created
+serviceaccount/istio-grafana-post-install-account created
+serviceaccount/istio-galley-service-account created
+serviceaccount/istio-egressgateway-service-account created
+serviceaccount/istio-cleanup-secrets-service-account created
+serviceaccount/istio-citadel-service-account created
+serviceaccount/prometheus created
+customresourcedefinition.apiextensions.k8s.io/redisquotas.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/meshpolicies.authentication.istio.io created
+customresourcedefinition.apiextensions.k8s.io/metrics.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/noops.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/opas.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/orders.certmanager.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/policies.authentication.istio.io created
+customresourcedefinition.apiextensions.k8s.io/prometheuses.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/quotas.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/quotaspecbindings.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/quotaspecs.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/rbacconfigs.rbac.istio.io created
+customresourcedefinition.apiextensions.k8s.io/rbacs.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/memquotas.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/reportnothings.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/rules.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/serviceentries.networking.istio.io created
+customresourcedefinition.apiextensions.k8s.io/servicerolebindings.rbac.istio.io created
+customresourcedefinition.apiextensions.k8s.io/serviceroles.rbac.istio.io created
+customresourcedefinition.apiextensions.k8s.io/sidecars.networking.istio.io created
+customresourcedefinition.apiextensions.k8s.io/signalfxs.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/solarwindses.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/stackdrivers.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/statsds.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/stdios.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/templates.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/tracespans.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/virtualservices.networking.istio.io created
+customresourcedefinition.apiextensions.k8s.io/zipkins.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/logentries.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/listentries.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/listcheckers.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/kuberneteses.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/kubernetesenvs.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/issuers.certmanager.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/httpapispecs.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/httpapispecbindings.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/handlers.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/gateways.networking.istio.io created
+customresourcedefinition.apiextensions.k8s.io/fluentds.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/envoyfilters.networking.istio.io created
+customresourcedefinition.apiextensions.k8s.io/edges.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/dogstatsds.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/destinationrules.networking.istio.io created
+customresourcedefinition.apiextensions.k8s.io/deniers.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/clusterrbacconfigs.rbac.istio.io created
+customresourcedefinition.apiextensions.k8s.io/clusterissuers.certmanager.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/circonuses.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/checknothings.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/challenges.certmanager.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/certificates.certmanager.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/bypasses.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/authorizations.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/attributemanifests.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/apikeys.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/adapters.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/cloudwatches.config.istio.io created
+customresourcedefinition.apiextensions.k8s.io/instances.config.istio.io created
+clusterrole.rbac.authorization.k8s.io/istio-citadel-istio-system created
+clusterrole.rbac.authorization.k8s.io/istio-galley-istio-system created
+clusterrole.rbac.authorization.k8s.io/istio-grafana-post-install-istio-system created
+clusterrole.rbac.authorization.k8s.io/istio-ingressgateway-istio-system created
+clusterrole.rbac.authorization.k8s.io/istio-mixer-istio-system created
+clusterrole.rbac.authorization.k8s.io/istio-security-post-install-istio-system created
+clusterrole.rbac.authorization.k8s.io/istio-pilot-istio-system created
+clusterrole.rbac.authorization.k8s.io/prometheus-istio-system created
+clusterrole.rbac.authorization.k8s.io/istio-reader created
+clusterrole.rbac.authorization.k8s.io/istio-sidecar-injector-istio-system created
+clusterrole.rbac.authorization.k8s.io/kiali created
+clusterrole.rbac.authorization.k8s.io/kiali-viewer created
+clusterrole.rbac.authorization.k8s.io/istio-egressgateway-istio-system created
+clusterrole.rbac.authorization.k8s.io/istio-cleanup-secrets-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-sidecar-injector-admin-role-binding-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-pilot-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-multi created
+clusterrolebinding.rbac.authorization.k8s.io/istio-mixer-admin-role-binding-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-ingressgateway-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-galley-admin-role-binding-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-egressgateway-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-cleanup-secrets-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-citadel-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-grafana-post-install-role-binding-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-security-post-install-role-binding-istio-system created
+clusterrolebinding.rbac.authorization.k8s.io/istio-kiali-admin-role-binding-istio-system created
+role.rbac.authorization.k8s.io/istio-ingressgateway-sds created
+rolebinding.rbac.authorization.k8s.io/istio-ingressgateway-sds created
+service/zipkin created
+service/grafana created
+service/istio-citadel created
+service/istio-egressgateway created
+service/istio-galley created
+service/istio-ingressgateway created
+service/istio-pilot created
+service/istio-policy created
+service/istio-sidecar-injector created
+service/istio-telemetry created
+service/jaeger-agent created
+service/jaeger-collector created
+service/jaeger-query created
+service/kiali created
+service/prometheus created
+service/tracing created
+deployment.apps/istio-tracing created
+deployment.apps/grafana created
+deployment.apps/istio-citadel created
+deployment.apps/istio-policy created
+deployment.apps/kiali created
+deployment.apps/istio-ingressgateway created
+deployment.apps/istio-pilot created
+deployment.apps/prometheus created
+deployment.apps/istio-sidecar-injector created
+deployment.apps/istio-telemetry created
+deployment.apps/istio-egressgateway created
+deployment.apps/istio-galley created
+job.batch/istio-security-post-install-1.1.6 created
+job.batch/istio-grafana-post-install-1.1.6 created
+job.batch/istio-cleanup-secrets-1.1.6 created
+mutatingwebhookconfiguration.admissionregistration.k8s.io/istio-sidecar-injector created
+destinationrule.networking.istio.io/istio-policy created
+destinationrule.networking.istio.io/istio-telemetry created
+horizontalpodautoscaler.autoscaling/istio-egressgateway created
+horizontalpodautoscaler.autoscaling/istio-policy created
+horizontalpodautoscaler.autoscaling/istio-pilot created
+horizontalpodautoscaler.autoscaling/istio-ingressgateway created
+horizontalpodautoscaler.autoscaling/istio-telemetry created
+poddisruptionbudget.policy/istio-telemetry created
+poddisruptionbudget.policy/istio-ingressgateway created
+poddisruptionbudget.policy/istio-galley created
+poddisruptionbudget.policy/istio-egressgateway created
+poddisruptionbudget.policy/istio-policy created
+poddisruptionbudget.policy/istio-pilot created
+route.route.openshift.io/istio-ingressgateway created
+attributemanifest.config.istio.io/kubernetes created
+attributemanifest.config.istio.io/istioproxy created
+handler.config.istio.io/stdio created
+handler.config.istio.io/prometheus created
+handler.config.istio.io/kubernetesenv created
+kubernetes.config.istio.io/attributes created
+logentry.config.istio.io/tcpaccesslog created
+logentry.config.istio.io/accesslog created
+metric.config.istio.io/responsesize created
+metric.config.istio.io/tcpbytereceived created
+metric.config.istio.io/tcpbytesent created
+metric.config.istio.io/requestsize created
+metric.config.istio.io/tcpconnectionsopened created
+metric.config.istio.io/tcpconnectionsclosed created
+metric.config.istio.io/requestcount created
+metric.config.istio.io/requestduration created
+rule.config.istio.io/promtcpconnectionclosed created
+rule.config.istio.io/promtcpconnectionopen created
+rule.config.istio.io/promtcp created
+rule.config.istio.io/stdiotcp created
+rule.config.istio.io/tcpkubeattrgenrulerule created
+rule.config.istio.io/promhttp created
+rule.config.istio.io/kubeattrgenrulerule created
+rule.config.istio.io/stdio created
+INFO[0012] Successfully applied application istio-stack  filename="kustomize/kustomize.go:291"
+INFO[0012] Deploying application istio                   filename="kustomize/kustomize.go:266"
+configmap/istio-parameters-t6hhgfg9k2 created
+clusterrole.rbac.authorization.k8s.io/kubeflow-istio-admin created
+clusterrole.rbac.authorization.k8s.io/kubeflow-istio-edit created
+clusterrole.rbac.authorization.k8s.io/kubeflow-istio-view created
+clusterrbacconfig.rbac.istio.io/default created
+gateway.networking.istio.io/kubeflow-gateway created
+serviceentry.networking.istio.io/google-api-entry created
+serviceentry.networking.istio.io/google-storage-api-entry created
+virtualservice.networking.istio.io/google-api-vs created
+virtualservice.networking.istio.io/google-storage-api-vs created
+virtualservice.networking.istio.io/grafana-vs created
+INFO[0013] Successfully applied application istio        filename="kustomize/kustomize.go:291"
+INFO[0013] Deploying application application             filename="kustomize/kustomize.go:266"
+serviceaccount/application-controller-service-account created
+customresourcedefinition.apiextensions.k8s.io/applications.app.k8s.io created
+clusterrole.rbac.authorization.k8s.io/application-controller-cluster-role created
+clusterrolebinding.rbac.authorization.k8s.io/application-controller-cluster-role-binding created
+service/application-controller-service created
+statefulset.apps/application-controller-stateful-set created
+application.app.k8s.io/application-controller-kubeflow created
+INFO[0014] Successfully applied application application  filename="kustomize/kustomize.go:291"
+INFO[0014] Deploying application metacontroller          filename="kustomize/kustomize.go:266"
+serviceaccount/meta-controller-service created
+customresourcedefinition.apiextensions.k8s.io/compositecontrollers.metacontroller.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/controllerrevisions.metacontroller.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/decoratorcontrollers.metacontroller.k8s.io created
+clusterrolebinding.rbac.authorization.k8s.io/meta-controller-cluster-role-binding created
+statefulset.apps/metacontroller created
+INFO[0014] Successfully applied application metacontroller  filename="kustomize/kustomize.go:291"
+INFO[0014] Deploying application cert-manager-crds       filename="kustomize/kustomize.go:266"
+customresourcedefinition.apiextensions.k8s.io/certificaterequests.cert-manager.io created
+customresourcedefinition.apiextensions.k8s.io/certificates.cert-manager.io created
+customresourcedefinition.apiextensions.k8s.io/challenges.acme.cert-manager.io created
+customresourcedefinition.apiextensions.k8s.io/clusterissuers.cert-manager.io created
+customresourcedefinition.apiextensions.k8s.io/issuers.cert-manager.io created
+customresourcedefinition.apiextensions.k8s.io/orders.acme.cert-manager.io created
+INFO[0014] Successfully applied application cert-manager-crds  filename="kustomize/kustomize.go:291"
+INFO[0014] Deploying application cert-manager-kube-system-resources  filename="kustomize/kustomize.go:266"
+configmap/cert-manager-kube-params-parameters created
+role.rbac.authorization.k8s.io/cert-manager-cainjector:leaderelection created
+role.rbac.authorization.k8s.io/cert-manager:leaderelection created
+rolebinding.rbac.authorization.k8s.io/cert-manager-cainjector:leaderelection created
+rolebinding.rbac.authorization.k8s.io/cert-manager-webhook:webhook-authentication-reader created
+rolebinding.rbac.authorization.k8s.io/cert-manager:leaderelection created
+INFO[0015] Successfully applied application cert-manager-kube-system-resources  filename="kustomize/kustomize.go:291"
+INFO[0015] Deploying application cert-manager            filename="kustomize/kustomize.go:266"
+namespace/cert-manager created
+configmap/cert-manager-parameters created
+serviceaccount/cert-manager created
+serviceaccount/cert-manager-cainjector created
+serviceaccount/cert-manager-webhook created
+clusterrole.rbac.authorization.k8s.io/cert-manager-webhook:webhook-requester created
+clusterrole.rbac.authorization.k8s.io/cert-manager-view created
+clusterrole.rbac.authorization.k8s.io/cert-manager-edit created
+clusterrole.rbac.authorization.k8s.io/cert-manager-cainjector created
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-certificates created
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-challenges created
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers created
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim created
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-issuers created
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-orders created
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-webhook:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-cainjector created
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-challenges created
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers created
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim created
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-issuers created
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-orders created
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-certificates created
+service/cert-manager created
+service/cert-manager-webhook created
+deployment.apps/cert-manager created
+deployment.apps/cert-manager-cainjector created
+deployment.apps/cert-manager-webhook created
+mutatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook created
+validatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook created
+apiservice.apiregistration.k8s.io/v1beta1.webhook.cert-manager.io created
+application.app.k8s.io/cert-manager created
+WARN[0017] Encountered error applying application cert-manager:  (kubeflow.error): Code 500 with message: Apply.Run : error when creating "/tmp/kout805342815": Internal error occurred: failed calling webhook "webhook.cert-manager.io": the server is currently unable to handle the request  filename="kustomize/kustomize.go:284"
+WARN[0017] Will retry in 2 seconds.                      filename="kustomize/kustomize.go:285"
+namespace/cert-manager unchanged
+configmap/cert-manager-parameters unchanged
+serviceaccount/cert-manager unchanged
+serviceaccount/cert-manager-cainjector unchanged
+serviceaccount/cert-manager-webhook unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-webhook:webhook-requester unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-view unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-edit unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-webhook:auth-delegator configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+service/cert-manager unchanged
+service/cert-manager-webhook unchanged
+deployment.apps/cert-manager unchanged
+deployment.apps/cert-manager-cainjector configured
+deployment.apps/cert-manager-webhook configured
+mutatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+validatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+apiservice.apiregistration.k8s.io/v1beta1.webhook.cert-manager.io unchanged
+application.app.k8s.io/cert-manager unchanged
+WARN[0019] Encountered error applying application cert-manager:  (kubeflow.error): Code 500 with message: Apply.Run : error when creating "/tmp/kout765624653": Internal error occurred: failed calling webhook "webhook.cert-manager.io": the server is currently unable to handle the request  filename="kustomize/kustomize.go:284"
+WARN[0019] Will retry in 3 seconds.                      filename="kustomize/kustomize.go:285"
+namespace/cert-manager unchanged
+configmap/cert-manager-parameters unchanged
+serviceaccount/cert-manager unchanged
+serviceaccount/cert-manager-cainjector unchanged
+serviceaccount/cert-manager-webhook unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-webhook:webhook-requester unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-view unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-edit unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-webhook:auth-delegator configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+service/cert-manager unchanged
+service/cert-manager-webhook unchanged
+deployment.apps/cert-manager unchanged
+deployment.apps/cert-manager-cainjector configured
+deployment.apps/cert-manager-webhook configured
+mutatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+validatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+apiservice.apiregistration.k8s.io/v1beta1.webhook.cert-manager.io unchanged
+application.app.k8s.io/cert-manager unchanged
+WARN[0022] Encountered error applying application cert-manager:  (kubeflow.error): Code 500 with message: Apply.Run : error when creating "/tmp/kout013201594": Internal error occurred: failed calling webhook "webhook.cert-manager.io": the server is currently unable to handle the request  filename="kustomize/kustomize.go:284"
+WARN[0022] Will retry in 4 seconds.                      filename="kustomize/kustomize.go:285"
+namespace/cert-manager unchanged
+configmap/cert-manager-parameters unchanged
+serviceaccount/cert-manager unchanged
+serviceaccount/cert-manager-cainjector unchanged
+serviceaccount/cert-manager-webhook unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-webhook:webhook-requester unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-view unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-edit unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-webhook:auth-delegator configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+service/cert-manager unchanged
+service/cert-manager-webhook unchanged
+deployment.apps/cert-manager unchanged
+deployment.apps/cert-manager-cainjector configured
+deployment.apps/cert-manager-webhook configured
+mutatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+validatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+apiservice.apiregistration.k8s.io/v1beta1.webhook.cert-manager.io unchanged
+application.app.k8s.io/cert-manager unchanged
+WARN[0027] Encountered error applying application cert-manager:  (kubeflow.error): Code 500 with message: Apply.Run : error when creating "/tmp/kout346557227": Internal error occurred: failed calling webhook "webhook.cert-manager.io": the server is currently unable to handle the request  filename="kustomize/kustomize.go:284"
+WARN[0027] Will retry in 8 seconds.                      filename="kustomize/kustomize.go:285"
+namespace/cert-manager unchanged
+configmap/cert-manager-parameters unchanged
+serviceaccount/cert-manager unchanged
+serviceaccount/cert-manager-cainjector unchanged
+serviceaccount/cert-manager-webhook unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-webhook:webhook-requester unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-view unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-edit unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-webhook:auth-delegator configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+service/cert-manager unchanged
+service/cert-manager-webhook unchanged
+deployment.apps/cert-manager unchanged
+deployment.apps/cert-manager-cainjector configured
+deployment.apps/cert-manager-webhook configured
+mutatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+validatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+apiservice.apiregistration.k8s.io/v1beta1.webhook.cert-manager.io unchanged
+application.app.k8s.io/cert-manager unchanged
+WARN[0035] Encountered error applying application cert-manager:  (kubeflow.error): Code 500 with message: Apply.Run : error when creating "/tmp/kout021027568": Internal error occurred: failed calling webhook "webhook.cert-manager.io": the server is currently unable to handle the request  filename="kustomize/kustomize.go:284"
+WARN[0035] Will retry in 15 seconds.                     filename="kustomize/kustomize.go:285"
+namespace/cert-manager unchanged
+configmap/cert-manager-parameters unchanged
+serviceaccount/cert-manager unchanged
+serviceaccount/cert-manager-cainjector unchanged
+serviceaccount/cert-manager-webhook unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-webhook:webhook-requester unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-view unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-edit unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-webhook:auth-delegator configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+service/cert-manager unchanged
+service/cert-manager-webhook unchanged
+deployment.apps/cert-manager unchanged
+deployment.apps/cert-manager-cainjector configured
+deployment.apps/cert-manager-webhook configured
+mutatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+validatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+apiservice.apiregistration.k8s.io/v1beta1.webhook.cert-manager.io unchanged
+application.app.k8s.io/cert-manager configured
+WARN[0051] Encountered error applying application cert-manager:  (kubeflow.error): Code 500 with message: Apply.Run : error when creating "/tmp/kout475279513": Internal error occurred: failed calling webhook "webhook.cert-manager.io": the server is currently unable to handle the request  filename="kustomize/kustomize.go:284"
+WARN[0051] Will retry in 30 seconds.                     filename="kustomize/kustomize.go:285"
+namespace/cert-manager unchanged
+configmap/cert-manager-parameters unchanged
+serviceaccount/cert-manager unchanged
+serviceaccount/cert-manager-cainjector unchanged
+serviceaccount/cert-manager-webhook unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-webhook:webhook-requester unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-view unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-edit unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrole.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-webhook:auth-delegator configured
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-cainjector unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-challenges unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-clusterissuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-ingress-shim unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-issuers unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-orders unchanged
+clusterrolebinding.rbac.authorization.k8s.io/cert-manager-controller-certificates unchanged
+service/cert-manager unchanged
+service/cert-manager-webhook unchanged
+deployment.apps/cert-manager unchanged
+deployment.apps/cert-manager-cainjector configured
+deployment.apps/cert-manager-webhook configured
+mutatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+validatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook configured
+apiservice.apiregistration.k8s.io/v1beta1.webhook.cert-manager.io unchanged
+application.app.k8s.io/cert-manager configured
+clusterissuer.cert-manager.io/kubeflow-self-signing-issuer created
+INFO[0082] Successfully applied application cert-manager  filename="kustomize/kustomize.go:291"
+INFO[0082] Deploying application argo                    filename="kustomize/kustomize.go:266"
+configmap/kubeflow-config-f5fk62kk74 created
+configmap/workflow-controller-parameters created
+configmap/workflow-controller-configmap created
+serviceaccount/argo created
+serviceaccount/argo-ui created
+customresourcedefinition.apiextensions.k8s.io/workflows.argoproj.io configured
+clusterrole.rbac.authorization.k8s.io/argo-ui created
+clusterrole.rbac.authorization.k8s.io/argo created
+clusterrolebinding.rbac.authorization.k8s.io/argo-ui created
+clusterrolebinding.rbac.authorization.k8s.io/argo created
+service/argo-ui created
+deployment.apps/argo-ui created
+deployment.apps/workflow-controller created
+application.app.k8s.io/argo created
+virtualservice.networking.istio.io/argo-ui created
+INFO[0082] Successfully applied application argo         filename="kustomize/kustomize.go:291"
+INFO[0082] Deploying application jupyter-web-app         filename="kustomize/kustomize.go:266"
+configmap/jupyter-web-app-jupyter-web-app-config-c7ckdh44mc created
+configmap/kubeflow-config-f5fk62kk74 unchanged
+serviceaccount/jupyter-web-app-service-account created
+clusterrole.rbac.authorization.k8s.io/jupyter-web-app-cluster-role created
+clusterrole.rbac.authorization.k8s.io/jupyter-web-app-kubeflow-notebook-ui-admin created
+clusterrole.rbac.authorization.k8s.io/jupyter-web-app-kubeflow-notebook-ui-edit created
+clusterrole.rbac.authorization.k8s.io/jupyter-web-app-kubeflow-notebook-ui-view created
+clusterrolebinding.rbac.authorization.k8s.io/jupyter-web-app-cluster-role-binding created
+role.rbac.authorization.k8s.io/jupyter-web-app-jupyter-notebook-role created
+rolebinding.rbac.authorization.k8s.io/jupyter-web-app-jupyter-notebook-role-binding created
+service/jupyter-web-app-service created
+deployment.apps/jupyter-web-app-deployment created
+application.app.k8s.io/jupyter-web-app-jupyter-web-app created
+virtualservice.networking.istio.io/jupyter-web-app-jupyter-web-app created
+INFO[0083] Successfully applied application jupyter-web-app  filename="kustomize/kustomize.go:291"
+INFO[0083] Deploying application notebook-controller     filename="kustomize/kustomize.go:266"
+2021/03/12 05:15:52 well-defined vars that were never replaced: clusterDomain,namespace
+configmap/kubeflow-config-f5fk62kk74 unchanged
+configmap/notebook-controller-notebook-controller-config-h4d668t5tb created
+serviceaccount/notebook-controller-service-account created
+customresourcedefinition.apiextensions.k8s.io/notebooks.kubeflow.org created
+clusterrole.rbac.authorization.k8s.io/notebook-controller-kubeflow-notebooks-edit created
+clusterrole.rbac.authorization.k8s.io/notebook-controller-kubeflow-notebooks-view created
+clusterrole.rbac.authorization.k8s.io/notebook-controller-role created
+clusterrole.rbac.authorization.k8s.io/notebook-controller-kubeflow-notebooks-admin created
+clusterrolebinding.rbac.authorization.k8s.io/notebook-controller-role-binding created
+service/notebook-controller-service created
+deployment.apps/notebook-controller-deployment created
+application.app.k8s.io/notebook-controller-notebook-controller created
+INFO[0084] Successfully applied application notebook-controller  filename="kustomize/kustomize.go:291"
+INFO[0084] Deploying application metadata                filename="kustomize/kustomize.go:266"
+2021/03/12 05:15:52 well-defined vars that were never replaced: namespace,clusterDomain
+secret/metadata-db-secrets created
+configmap/kubeflow-config-f5fk62kk74 unchanged
+configmap/metadata-db-parameters created
+configmap/metadata-grpc-configmap created
+configmap/metadata-ui-parameters created
+persistentvolumeclaim/metadata-mysql created
+serviceaccount/metadatadb created
+service/metadata-db created
+service/metadata-grpc-service created
+service/metadata-envoy-service created
+deployment.apps/metadata-db created
+deployment.apps/metadata-envoy-deployment created
+deployment.apps/metadata-grpc-deployment created
+virtualservice.networking.istio.io/metadata-grpc created
+INFO[0084] Successfully applied application metadata     filename="kustomize/kustomize.go:291"
+INFO[0084] Deploying application tf-job                  filename="kustomize/kustomize.go:266"
+serviceaccount/tf-job-dashboard created
+serviceaccount/tf-job-operator created
+customresourcedefinition.apiextensions.k8s.io/tfjobs.kubeflow.org created
+clusterrole.rbac.authorization.k8s.io/kubeflow-tfjobs-admin created
+clusterrole.rbac.authorization.k8s.io/kubeflow-tfjobs-edit created
+clusterrole.rbac.authorization.k8s.io/kubeflow-tfjobs-view created
+clusterrole.rbac.authorization.k8s.io/tf-job-operator created
+clusterrolebinding.rbac.authorization.k8s.io/tf-job-operator created
+service/tf-job-operator created
+deployment.apps/tf-job-operator created
+application.app.k8s.io/tf-job-crds created
+application.app.k8s.io/tf-job-operator created
+INFO[0085] Successfully applied application tf-job       filename="kustomize/kustomize.go:291"
+INFO[0085] Deploying application pytorch-job             filename="kustomize/kustomize.go:266"
+serviceaccount/pytorch-operator created
+customresourcedefinition.apiextensions.k8s.io/pytorchjobs.kubeflow.org created
+clusterrole.rbac.authorization.k8s.io/kubeflow-pytorchjobs-admin created
+clusterrole.rbac.authorization.k8s.io/kubeflow-pytorchjobs-edit created
+clusterrole.rbac.authorization.k8s.io/kubeflow-pytorchjobs-view created
+clusterrole.rbac.authorization.k8s.io/pytorch-operator created
+clusterrolebinding.rbac.authorization.k8s.io/pytorch-operator created
+service/pytorch-operator created
+deployment.apps/pytorch-operator created
+application.app.k8s.io/pytorch-job-crds created
+application.app.k8s.io/pytorch-operator created
+INFO[0086] Successfully applied application pytorch-job  filename="kustomize/kustomize.go:291"
+INFO[0086] Deploying application katib                   filename="kustomize/kustomize.go:266"
+2021/03/12 05:15:54 well-defined vars that were never replaced: namespace
+secret/katib-mysql-secrets created
+secret/katib-controller created
+configmap/katib-config created
+configmap/trial-template created
+configmap/kubeflow-config-f5fk62kk74 unchanged
+persistentvolumeclaim/katib-mysql created
+serviceaccount/katib-ui created
+serviceaccount/katib-controller created
+customresourcedefinition.apiextensions.k8s.io/trials.kubeflow.org created
+customresourcedefinition.apiextensions.k8s.io/experiments.kubeflow.org created
+customresourcedefinition.apiextensions.k8s.io/suggestions.kubeflow.org created
+clusterrole.rbac.authorization.k8s.io/kubeflow-katib-view created
+clusterrole.rbac.authorization.k8s.io/katib-controller created
+clusterrole.rbac.authorization.k8s.io/kubeflow-katib-admin created
+clusterrole.rbac.authorization.k8s.io/kubeflow-katib-edit created
+clusterrole.rbac.authorization.k8s.io/katib-ui created
+clusterrolebinding.rbac.authorization.k8s.io/katib-ui created
+clusterrolebinding.rbac.authorization.k8s.io/katib-controller created
+service/katib-db-manager created
+service/katib-mysql created
+service/katib-ui created
+service/katib-controller created
+deployment.apps/katib-controller created
+deployment.apps/katib-mysql created
+deployment.apps/katib-ui created
+deployment.apps/katib-db-manager created
+application.app.k8s.io/katib-controller created
+application.app.k8s.io/katib-crds created
+virtualservice.networking.istio.io/katib-ui created
+INFO[0087] Successfully applied application katib        filename="kustomize/kustomize.go:291"
+INFO[0087] Deploying application pipeline                filename="kustomize/kustomize.go:266"
+2021/03/12 05:15:56 well-defined vars that were never replaced: namespace
+secret/mlpipeline-minio-artifact created
+secret/mysql-secret-fd5gktm75t created
+configmap/kubeflow-config-f5fk62kk74 unchanged
+configmap/ml-pipeline-ui-configmap created
+configmap/pipeline-install-config-2829cc67f8 created
+configmap/pipeline-upstream-install-config-d7hkh24mdg created
+persistentvolumeclaim/mysql-pv-claim created
+persistentvolumeclaim/minio-pvc created
+serviceaccount/ml-pipeline-persistenceagent created
+serviceaccount/ml-pipeline created
+serviceaccount/ml-pipeline-ui created
+serviceaccount/ml-pipeline-viewer-crd-service-account created
+serviceaccount/ml-pipeline-visualizationserver created
+serviceaccount/pipeline-runner created
+serviceaccount/kubeflow-pipelines-viewer created
+serviceaccount/kubeflow-pipelines-container-builder created
+serviceaccount/kubeflow-pipelines-cache-deployer-sa created
+serviceaccount/kubeflow-pipelines-cache created
+serviceaccount/ml-pipeline-scheduledworkflow created
+serviceaccount/kubeflow-pipelines-metadata-writer created
+customresourcedefinition.apiextensions.k8s.io/viewers.kubeflow.org created
+customresourcedefinition.apiextensions.k8s.io/scheduledworkflows.kubeflow.org created
+clusterrole.rbac.authorization.k8s.io/kubeflow-pipelines-cache-deployer-clusterrole created
+clusterrolebinding.rbac.authorization.k8s.io/kubeflow-pipelines-cache-deployer-clusterrolebinding created
+role.rbac.authorization.k8s.io/ml-pipeline-viewer-controller-role created
+role.rbac.authorization.k8s.io/pipeline-runner created
+role.rbac.authorization.k8s.io/ml-pipeline-persistenceagent-role created
+role.rbac.authorization.k8s.io/kubeflow-pipelines-cache-deployer-role created
+role.rbac.authorization.k8s.io/kubeflow-pipelines-cache-role created
+role.rbac.authorization.k8s.io/kubeflow-pipelines-metadata-writer-role created
+role.rbac.authorization.k8s.io/ml-pipeline created
+role.rbac.authorization.k8s.io/ml-pipeline-scheduledworkflow-role created
+role.rbac.authorization.k8s.io/ml-pipeline-ui created
+rolebinding.rbac.authorization.k8s.io/pipeline-runner-binding created
+rolebinding.rbac.authorization.k8s.io/ml-pipeline-scheduledworkflow-binding created
+rolebinding.rbac.authorization.k8s.io/ml-pipeline-persistenceagent-binding created
+rolebinding.rbac.authorization.k8s.io/ml-pipeline created
+rolebinding.rbac.authorization.k8s.io/kubeflow-pipelines-metadata-writer-binding created
+rolebinding.rbac.authorization.k8s.io/ml-pipeline-viewer-crd-binding created
+rolebinding.rbac.authorization.k8s.io/kubeflow-pipelines-cache-deployer-rolebinding created
+rolebinding.rbac.authorization.k8s.io/ml-pipeline-ui created
+rolebinding.rbac.authorization.k8s.io/kubeflow-pipelines-cache-binding created
+service/cache-server created
+service/ml-pipeline-ui created
+service/ml-pipeline-visualizationserver created
+service/mysql created
+service/minio-service created
+service/ml-pipeline created
+deployment.apps/minio created
+deployment.apps/metadata-writer created
+deployment.apps/ml-pipeline created
+deployment.apps/ml-pipeline-persistenceagent created
+deployment.apps/cache-server created
+deployment.apps/ml-pipeline-ui created
+deployment.apps/ml-pipeline-viewer-crd created
+deployment.apps/cache-deployer-deployment created
+deployment.apps/mysql created
+deployment.apps/ml-pipeline-scheduledworkflow created
+deployment.apps/ml-pipeline-visualizationserver created
+application.app.k8s.io/minio created
+application.app.k8s.io/mysql created
+application.app.k8s.io/kubeflow-pipelines created
+virtualservice.networking.istio.io/ml-pipeline-ui created
+INFO[0089] Successfully applied application pipeline     filename="kustomize/kustomize.go:291"
+INFO[0089] Deploying application seldon                  filename="kustomize/kustomize.go:266"
+2021/03/12 05:15:58 well-defined vars that were never replaced: clusterDomain,namespace,CERTIFICATE_NAME
+configmap/seldon-config created
+configmap/kubeflow-config-f5fk62kk74 unchanged
+serviceaccount/seldon-manager created
+Warning:  apply should be used on resource created by either  create --save-config or  apply
+customresourcedefinition.apiextensions.k8s.io/seldondeployments.machinelearning.seldon.io configured
+clusterrole.rbac.authorization.k8s.io/seldon-manager-role-kubeflow created
+clusterrole.rbac.authorization.k8s.io/seldon-manager-sas-role-kubeflow created
+clusterrolebinding.rbac.authorization.k8s.io/seldon-manager-rolebinding-kubeflow created
+clusterrolebinding.rbac.authorization.k8s.io/seldon-manager-sas-rolebinding-kubeflow created
+role.rbac.authorization.k8s.io/seldon-leader-election-role created
+rolebinding.rbac.authorization.k8s.io/seldon-leader-election-rolebinding created
+service/seldon-webhook-service created
+deployment.apps/seldon-controller-manager created
+mutatingwebhookconfiguration.admissionregistration.k8s.io/seldon-mutating-webhook-configuration-kubeflow created
+validatingwebhookconfiguration.admissionregistration.k8s.io/seldon-validating-webhook-configuration-kubeflow created
+application.app.k8s.io/seldon-core-operator created
+certificate.cert-manager.io/seldon-serving-cert created
+issuer.cert-manager.io/seldon-selfsigned-issuer created
+INFO[0091] Successfully applied application seldon       filename="kustomize/kustomize.go:291"
+INFO[0091] Deploying application kubeflow-apps           filename="kustomize/kustomize.go:266"
+configmap/centraldashboard-links-config created
+configmap/profiles-profiles-config-4mgcmtgk6t created
+configmap/kubeflow-config-f5fk62kk74 unchanged
+serviceaccount/centraldashboard created
+serviceaccount/profiles-controller-service-account created
+customresourcedefinition.apiextensions.k8s.io/profiles.kubeflow.org created
+clusterrole.rbac.authorization.k8s.io/centraldashboard created
+clusterrolebinding.rbac.authorization.k8s.io/centraldashboard created
+clusterrolebinding.rbac.authorization.k8s.io/profiles-cluster-role-binding created
+role.rbac.authorization.k8s.io/centraldashboard created
+rolebinding.rbac.authorization.k8s.io/centraldashboard created
+service/centraldashboard created
+service/profiles-kfam created
+deployment.apps/centraldashboard created
+deployment.apps/profiles-deployment created
+application.app.k8s.io/centraldashboard created
+application.app.k8s.io/profiles-profiles created
+virtualservice.networking.istio.io/centraldashboard created
+virtualservice.networking.istio.io/profiles-kfam created
+INFO[0092] Successfully applied application kubeflow-apps  filename="kustomize/kustomize.go:291"
+INFO[0092] Applied the configuration Successfully!       filename="cmd/apply.go:75"

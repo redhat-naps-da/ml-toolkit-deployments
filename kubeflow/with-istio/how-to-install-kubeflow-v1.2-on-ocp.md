@@ -1,6 +1,6 @@
-# How to install Kubeflow v1.2 on OpenShift using the Operator
+# How to install Kubeflow 1.2 on OpenShift 4.7 using the Operator 1.0
 
-The latest release of Kubeflow incorporates new changes to the configuration files structure, or stacks, that ultimately organize files into distribution-specific manifests for platforms like OpenShift. If you are interested in the details here is the source [Pull Request](https://github.com/kubeflow/manifests/pull/1739). 
+The latest release of Kubeflow at the time of this writing incorporates new changes to the configuration files structure, or stacks, that ultimately organize files into distribution-specific manifests for platforms like OpenShift. If you are interested in the details here is the source [Pull Request](https://github.com/kubeflow/manifests/pull/1739). 
 
 The goal of this post is to perform a default install of Kubeflow v1.2 on Red Hat OpenShift v4.7 using the Open Data Hub Operator v1.0 from the OpenShift web console. Screen shots will follow steps.
 
