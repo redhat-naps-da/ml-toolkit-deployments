@@ -1,21 +1,24 @@
 # Kubeflow Security Assessment
-
 ## Background
 As Open Data Hub and Kubeflow gets more attention in the AI/ML space, the security posture is a top priority to understand.
 
 Kubeflow is a designed to be a composable set of ML tools, therefore no two installations may be alike. 
 
-## Baseline manifests
+## Artifacts
+1. README to document manual procedure
+1. Log file of successful installation
+1. CVS comma separated file of container images
+## Baseline manifests for assessment
 1. "Kubeflow" [kfctl_openshift.v1.2.0.yaml](https://raw.githubusercontent.com/kubeflow/manifests/master/distributions/kfdef/kfctl_openshift.v1.2.0.yaml)
 
-## Goal
+## Goal of this page
 Create repeatable procedure/report to automate the security posture assessment for any variation of Kubeflow by reporting post-installation:
 1. projects created/modified by kubeflow install 
 1. pods per created/modified kubeflow project
 1. container images by pod per created/modified kubeflow projectt
 1. container image scan CVE report
 
-## Brief Procedure
+## Procedure brief
 This procedure should be used to create an automated reporting/scanning using OpenShift operators/tools.
 ### Setup:
 Starting with a clean project, install Kubeflow using kfctl as it provides verbosity on install and is easier to query. This is not the "approved" way to install Kubeflow on OCP, but it is a way.
