@@ -1,4 +1,4 @@
-# How to install Kubeflow v1 on OpenShift v4.6 with Service Mesh v2
+# How to install Kubeflow v1 on OpenShift v4.6 with Service Mesh v2 (DRAFT!!)
 
 If you're looking to run a robust machine learning toolkit on an enterprise-class Kubernetes distribution with a microservice network, you came to the right article. This post is more of a procedure that builds upon posts from earlier software versions [Integrating Kubeflow with Red Hat OpenShift Service Mesh](https://developers.redhat.com/blog/2020/04/24/integrating-kubeflow-with-red-hat-openshift-service-mesh/) with some tweaks along the way for current versions. This process utilizes both the web console and the command line to perform the installation:
 ## Overview of the procedure
