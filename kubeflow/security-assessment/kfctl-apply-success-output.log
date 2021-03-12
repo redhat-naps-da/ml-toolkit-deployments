@@ -1,4 +1,4 @@
-[dmarcus-redhat.com@bastion ~]$ kfctl apply -f kfctl_openshift.v1.2.0.yaml -V | tee /tmp/kf-install-log-$(date)
+[dmarcus-redhat.com@bastion ~]$ kfctl apply -f kfctl_openshift.v1.2.0.yaml -V | tee /tmp/kf-install-log-$(date +%Y%m%d%H%M)
 INFO[0000] Creating directory .cache                     filename="kfconfig/types.go:450"
 INFO[0000] Fetching https://github.com/kubeflow/manifests/archive/v1.2-branch.tar.gz to .cache/manifests  filename="kfconfig/types.go:498"
 INFO[0001] Updating localPath to .cache/manifests/manifests-1.2-branch  filename="kfconfig/types.go:569"

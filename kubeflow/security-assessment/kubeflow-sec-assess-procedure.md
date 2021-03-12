@@ -9,10 +9,11 @@ Kubeflow is a designed to be a composable set of ML tools, therefore no two inst
 1. "Kubeflow" [kfctl_openshift.v1.2.0.yaml](https://raw.githubusercontent.com/kubeflow/manifests/master/distributions/kfdef/kfctl_openshift.v1.2.0.yaml)
 
 ## Goal
-Create repeatable manual procedure to assess the installed security posture for any variation of Kubeflow by reporting post-installation:
+Create repeatable automated procedure/report to assess the installed security posture for any variation of Kubeflow by reporting post-installation:
 1. projects created 
 1. pods creates per project
 1. container images by pod created by project
+1. container image scan CVE report
 
 ## Brief Procedure
 
@@ -20,7 +21,7 @@ Create repeatable manual procedure to assess the installed security posture for 
 1. Clean RHPDS Workshops (High-Cost Workloads) OCP 4.5/4.7
 1. ssh to bastion
 1. oc login to cluster from bastion
-1. wget wget https://github.com/kubeflow/kfctl/releases/download/v1.2.0/kfctl_v1.2.0-0-gbc038f9_linux.tar.gz
+1. wget https://github.com/kubeflow/kfctl/releases/download/v1.2.0/kfctl_v1.2.0-0-gbc038f9_linux.tar.gz
 1. tar -xf kfctl_v1.2.0-0-gbc038f9_linux.tar.gz
 1. sudo mv kfctl /usr/bin
 1. kfctl --version
@@ -28,7 +29,7 @@ Create repeatable manual procedure to assess the installed security posture for 
 ### For Kubeflow manifest:
 1. oc new-project kubeflow
 1. wget https://raw.githubusercontent.com/kubeflow/manifests/master/distributions/kfdef/kfctl_openshift.v1.2.0.yaml
-1. kfctl apply -f kfctl_openshift.v1.2.0.yaml -V | tee /tmp/kf-install-log-$(date +%x)
+1. kfctl apply -f kfctl_openshift.v1.2.0.yaml -V | tee /tmp/kf-install-log-$(date +%Y%m%d%H%M)
 1. [success log](./kfctl-apply-success-output.log)
 
 # projects created/modified
