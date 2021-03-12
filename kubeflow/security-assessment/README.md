@@ -9,15 +9,17 @@ Kubeflow is a designed to be a composable set of ML tools, therefore no two inst
 1. "Kubeflow" [kfctl_openshift.v1.2.0.yaml](https://raw.githubusercontent.com/kubeflow/manifests/master/distributions/kfdef/kfctl_openshift.v1.2.0.yaml)
 
 ## Goal
-Create repeatable automated procedure/report to assess the installed security posture for any variation of Kubeflow by reporting post-installation:
-1. projects created 
-1. pods creates per project
-1. container images by pod created by project
+Create repeatable procedure/report to automate the security posture assessment for any variation of Kubeflow by reporting post-installation:
+1. projects created/modified by kubeflow install 
+1. pods per created/modified kubeflow project
+1. container images by pod per created/modified kubeflow projectt
 1. container image scan CVE report
 
 ## Brief Procedure
+This procedure should be used to create an automated reporting/scanning using OpenShift operators/tools.
+### Setup:
+Starting with a clean project, install Kubeflow using kfctl as it provides verbosity on install and is easier to query. This is not the "approved" way to install Kubeflow on OCP, but it is a way.
 
-### Common:
 1. Clean RHPDS Workshops (High-Cost Workloads) OCP 4.5/4.7
 1. ssh to bastion
 1. oc login to cluster from bastion
@@ -27,17 +29,19 @@ Create repeatable automated procedure/report to assess the installed security po
 1. kfctl --version
 
 ### For Kubeflow manifest:
+There are several manifests to choose from that install different components. The latest release of Kubeflow 1.2 includes an OpenShift distribution that Red Hat owns for an opinionated installation of Kubeflow components on OpenShift.
+
 1. oc new-project kubeflow
 1. wget https://raw.githubusercontent.com/kubeflow/manifests/master/distributions/kfdef/kfctl_openshift.v1.2.0.yaml
 1. kfctl apply -f kfctl_openshift.v1.2.0.yaml -V | tee /tmp/kf-install-log-$(date +%Y%m%d%H%M)
 1. [success log](./kfctl-apply-success-output.log)
 
-# projects created/modified
+# What projects are created/modified during Kubeflow Install
 1. kubeflow manually created
 1. istio-system created
 1. cert-manager unchanged
 
-# List all container images in created projects
+# List all container images in created/modified Kubeflow projects
 - Fetch all Pods in all namespaces using oc get pods -n {kubeflow, istio-system, ...}
 - Format the output to include only the list of Container image names using -o jsonpath={..image}. This will recursively parse out the image field from the returned json.
 - Format the output using standard tools: tr, sort, uniq
@@ -45,11 +49,11 @@ Create repeatable automated procedure/report to assess the installed security po
   - sort to sort the results
   - uniq to aggregate image counts
 
-## kubeflow Pods
+## kubeflow project pods
 ```
 oc get pods -n kubeflow | wc -l; oc get pods -n kubeflow -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq -c
 ```
-## Output
+**output**
 ```
 30
       1 argoproj/argoui:v2.3.0
@@ -87,11 +91,11 @@ oc get pods -n kubeflow | wc -l; oc get pods -n kubeflow -o jsonpath="{..image}"
       2 quay.io/kubeflow/profile-controller:v1.1.0
       2 registry.redhat.io/rhscl/mysql-80-rhel7:latest
 ```
-## istio-system pods
+## istio-system project pods
 ```
 oc get pods -n istio-system | wc -l; oc get pods -n istio-system -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq -c
 ```
-## Output
+**output**
 ```
 20
       2 docker.io/istio/citadel:1.1.6
@@ -105,14 +109,137 @@ oc get pods -n istio-system | wc -l; oc get pods -n istio-system -o jsonpath="{.
       2 docker.io/kiali/kiali:v0.16
       2 docker.io/prom/prometheus:v2.3.1
 ```
-## cert-manager pods
+## cert-manager project pods
 ```
 oc get pods -n cert-manager | wc -l; oc get pods -n cert-manager -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq -c
 ```
-## Output
+
+**output**
 ```
 4
       2 quay.io/jetstack/cert-manager-cainjector:v0.11.0
       2 quay.io/jetstack/cert-manager-controller:v0.11.0
       2 quay.io/jetstack/cert-manager-webhook:v0.11.0 
+```
+
+## All kubeflow created/modified project container images
+```
+oc get pods -n kubeflow -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq;oc get pods -n istio-system -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq; oc get pods -n cert-manager -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq
+```
+
+**output**
+```
+argoproj/argoui:v2.3.0
+argoproj/workflow-controller:v2.3.0
+docker.io/argoproj/argoui:v2.3.0
+docker.io/argoproj/workflow-controller:v2.3.0
+docker.io/kubeflowkatib/katib-controller:v1beta1-a96ff59
+docker.io/kubeflowkatib/katib-db-manager:v1beta1-a96ff59
+docker.io/kubeflowkatib/katib-ui:v1beta1-a96ff59
+docker.io/library/mysql:8.0.3
+docker.io/metacontroller/metacontroller:v0.3.0
+docker.io/seldonio/seldon-core-operator:1.4.0
+gcr.io/kubeflow-images-public/centraldashboard:vmaster-g8097cfeb
+gcr.io/kubeflow-images-public/kfam:vmaster-g9f3bfd00
+gcr.io/kubeflow-images-public/kubernetes-sigs/application:1.0-beta
+gcr.io/kubeflow-images-public/notebook-controller:vmaster-g6eb007d0
+gcr.io/kubeflow-images-public/pytorch-operator:vmaster-g518f9c76
+gcr.io/kubeflow-images-public/tf_operator:vmaster-gda226016
+gcr.io/ml-pipeline/api-server:1.0.4
+gcr.io/ml-pipeline/cache-deployer:1.0.4
+gcr.io/ml-pipeline/cache-server:1.0.4
+gcr.io/ml-pipeline/envoy:metadata-grpc
+gcr.io/ml-pipeline/frontend:1.0.4
+gcr.io/ml-pipeline/metadata-writer:1.0.4
+gcr.io/ml-pipeline/minio:RELEASE.2019-08-14T20-37-41Z-license-compliance
+gcr.io/ml-pipeline/mysql:5.6
+gcr.io/ml-pipeline/persistenceagent:1.0.4
+gcr.io/ml-pipeline/scheduledworkflow:1.0.4
+gcr.io/ml-pipeline/viewer-crd-controller:1.0.4
+gcr.io/ml-pipeline/visualization-server:1.0.4
+gcr.io/tfx-oss-public/ml_metadata_store_server:v0.21.1
+metacontroller/metacontroller:v0.3.0
+mysql:8.0.3
+quay.io/kubeflow/jupyter-web-app:v1.0.0
+quay.io/kubeflow/profile-controller:v1.1.0
+registry.redhat.io/rhscl/mysql-80-rhel7:latest
+docker.io/istio/citadel:1.1.6
+docker.io/istio/galley:1.1.6
+docker.io/istio/kubectl:1.1.6
+docker.io/istio/mixer:1.1.6
+docker.io/istio/pilot:1.1.6
+docker.io/istio/proxyv2:1.1.6
+docker.io/istio/sidecar_injector:1.1.6
+docker.io/jaegertracing/all-in-one:1.9
+docker.io/kiali/kiali:v0.16
+docker.io/prom/prometheus:v2.3.1
+quay.io/jetstack/cert-manager-cainjector:v0.11.0
+quay.io/jetstack/cert-manager-controller:v0.11.0
+quay.io/jetstack/cert-manager-webhook:v0.11.0
+```
+
+## All kubeflow created/modified project container images by pod
+```
+oc get pods -n kubeflow -o=jsonpath='{range .items[*]}{"\n"}{.metadata.name}{":\t"}{range .spec.containers[*]}{.image}{", "}{end}{end}' | sort | uniq; oc get pods -n istio-system -o=jsonpath='{range .items[*]}{"\n"}{.metadata.name}{":\t"}{range .spec.containers[*]}{.image}{", "}{end}{end}' | sort | uniq; oc get pods -n cert-manager -o=jsonpath='{range .items[*]}{"\n"}{.metadata.name}{":\t"}{range .spec.containers[*]}{.image}{", "}{end}{end}' | sort | uniq
+```
+
+**output**
+```
+application-controller-stateful-set-0:  gcr.io/kubeflow-images-public/kubernetes-sigs/application:1.0-beta, 
+argo-ui-65df8c7c84-9pdlv:       argoproj/argoui:v2.3.0, 
+cache-deployer-deployment-5f4979f45-x4kjm:      gcr.io/ml-pipeline/cache-deployer:1.0.4, 
+cache-server-7f897fdb98-v6m2h:  gcr.io/ml-pipeline/cache-server:1.0.4, 
+centraldashboard-8d9bd597c-8rr7v:       gcr.io/kubeflow-images-public/centraldashboard:vmaster-g8097cfeb, 
+jupyter-web-app-deployment-bf7ddff77-5d9bc:     quay.io/kubeflow/jupyter-web-app:v1.0.0, 
+katib-controller-7f78bc8b76-68qxt:      docker.io/kubeflowkatib/katib-controller:v1beta1-a96ff59, 
+katib-db-manager-85db457c64-9fcxd:      docker.io/kubeflowkatib/katib-db-manager:v1beta1-a96ff59, 
+katib-mysql-86886cb88-94494:    registry.redhat.io/rhscl/mysql-80-rhel7:latest, 
+katib-ui-65dc4cf6f5-44z7z:      docker.io/kubeflowkatib/katib-ui:v1beta1-a96ff59, 
+metacontroller-0:       metacontroller/metacontroller:v0.3.0, 
+metadata-db-c548b46fb-pkg4x:    mysql:8.0.3, 
+metadata-envoy-deployment-67bd5954c-f57j8:      gcr.io/ml-pipeline/envoy:metadata-grpc, 
+metadata-grpc-deployment-577c67c96f-bqssf:      gcr.io/tfx-oss-public/ml_metadata_store_server:v0.21.1, 
+metadata-writer-56d7cb577f-bwcq6:       gcr.io/ml-pipeline/metadata-writer:1.0.4, 
+minio-54d995c97b-jkcvz: gcr.io/ml-pipeline/minio:RELEASE.2019-08-14T20-37-41Z-license-compliance, 
+ml-pipeline-558955648c-7dqqv:   gcr.io/ml-pipeline/api-server:1.0.4, 
+ml-pipeline-persistenceagent-9ff96c48-jpcxs:    gcr.io/ml-pipeline/persistenceagent:1.0.4, 
+ml-pipeline-scheduledworkflow-9d9d9ccdb-849l5:  gcr.io/ml-pipeline/scheduledworkflow:1.0.4, 
+ml-pipeline-ui-68c468947b-w4nts:        gcr.io/ml-pipeline/frontend:1.0.4, 
+ml-pipeline-viewer-crd-cf69bb4c-cxqfv:  gcr.io/ml-pipeline/viewer-crd-controller:1.0.4, 
+ml-pipeline-visualizationserver-5b9bd8f6bf-dngzf:       gcr.io/ml-pipeline/visualization-server:1.0.4, 
+mysql-74f8f99bc8-g2747: gcr.io/ml-pipeline/mysql:5.6, 
+notebook-controller-deployment-6d7f477858-dzhtz:        gcr.io/kubeflow-images-public/notebook-controller:vmaster-g6eb007d0, 
+profiles-deployment-64dbb98fd-mnjp7:    quay.io/kubeflow/profile-controller:v1.1.0, gcr.io/kubeflow-images-public/kfam:vmaster-g9f3bfd00, 
+pytorch-operator-847c8d55d8-vwn7j:      gcr.io/kubeflow-images-public/pytorch-operator:vmaster-g518f9c76, 
+seldon-controller-manager-567697559d-w5wpn:     docker.io/seldonio/seldon-core-operator:1.4.0, 
+tf-job-operator-58477797f8-zdc26:       gcr.io/kubeflow-images-public/tf_operator:vmaster-gda226016, 
+workflow-controller-64fd7cffc5-7p485:   argoproj/workflow-controller:v2.3.0, 
+
+istio-citadel-7875d6b485-mvlsx: docker.io/istio/citadel:1.1.6, 
+istio-cleanup-secrets-1.1.6-hlfxg:      docker.io/istio/kubectl:1.1.6, 
+istio-egressgateway-5dd6fd868-d4g5h:    docker.io/istio/proxyv2:1.1.6, 
+istio-egressgateway-5dd6fd868-fwkv7:    docker.io/istio/proxyv2:1.1.6, 
+istio-egressgateway-5dd6fd868-hwhnf:    docker.io/istio/proxyv2:1.1.6, 
+istio-egressgateway-5dd6fd868-kcktl:    docker.io/istio/proxyv2:1.1.6, 
+istio-galley-575f4488c8-d5rcw:  docker.io/istio/galley:1.1.6, 
+istio-grafana-post-install-1.1.6-88hhw: docker.io/istio/kubectl:1.1.6, 
+istio-ingressgateway-68bf5c474c-7gcv5:  docker.io/istio/proxyv2:1.1.6, 
+istio-ingressgateway-68bf5c474c-rs6nh:  docker.io/istio/proxyv2:1.1.6, 
+istio-ingressgateway-68bf5c474c-rxk45:  docker.io/istio/proxyv2:1.1.6, 
+istio-ingressgateway-68bf5c474c-tl4b6:  docker.io/istio/proxyv2:1.1.6, 
+istio-ingressgateway-68bf5c474c-wb4x6:  docker.io/istio/proxyv2:1.1.6, 
+istio-pilot-59848fddcc-l8xj8:   docker.io/istio/pilot:1.1.6, docker.io/istio/proxyv2:1.1.6, 
+istio-pilot-59848fddcc-wgxjr:   docker.io/istio/pilot:1.1.6, docker.io/istio/proxyv2:1.1.6, 
+istio-policy-6fcf9ff577-dhrr2:  docker.io/istio/mixer:1.1.6, docker.io/istio/proxyv2:1.1.6, 
+istio-policy-6fcf9ff577-nzmv9:  docker.io/istio/mixer:1.1.6, docker.io/istio/proxyv2:1.1.6, 
+istio-security-post-install-1.1.6-66klk:        docker.io/istio/kubectl:1.1.6, 
+istio-sidecar-injector-fc5f57b94-nkc6p: docker.io/istio/sidecar_injector:1.1.6, 
+istio-telemetry-6cb7b6c7c-kkdzc:        docker.io/istio/mixer:1.1.6, docker.io/istio/proxyv2:1.1.6, 
+istio-tracing-6b4954c95f-clbht: docker.io/jaegertracing/all-in-one:1.9, 
+kiali-7bf4494b7f-2nx66: docker.io/kiali/kiali:v0.16, 
+prometheus-9554bc677-67nvb:     docker.io/prom/prometheus:v2.3.1, 
+
+cert-manager-7c75b559c4-jdwgs:  quay.io/jetstack/cert-manager-controller:v0.11.0, 
+cert-manager-cainjector-7f964fd7b5-fwdth:       quay.io/jetstack/cert-manager-cainjector:v0.11.0, 
+cert-manager-webhook-566dd99d6-zc4zs:   quay.io/jetstack/cert-manager-webhook:v0.11.0, 
 ```
