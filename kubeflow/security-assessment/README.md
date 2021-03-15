@@ -1,58 +1,64 @@
-# Kubeflow Security Assessment
+# Kubeflow Security Assessment (IN WORK)
 ## Background
-As Open Data Hub and Kubeflow gets more attention in the AI/ML space, the security posture is a top priority to understand.
+As Open Data Hub and Kubeflow gets more attention in the AI/ML space, the security posture is a top priority to understand. Kubeflow is a designed to be a composable set of ML tools, therefore no two installations may be alike. 
 
-Kubeflow is a designed to be a composable set of ML tools, therefore no two installations may be alike. 
-
-## Artifacts
-1. README to document manual procedure
-1. Log file of successful installation
-1. CVS comma separated file of container images
-## Baseline manifests for assessment
-1. "Kubeflow" [kfctl_openshift.v1.2.0.yaml](https://raw.githubusercontent.com/kubeflow/manifests/master/distributions/kfdef/kfctl_openshift.v1.2.0.yaml)
-
-## Goal of this page
+## Goals
 Create repeatable procedure/report to automate the security posture assessment for any variation of Kubeflow by reporting post-installation:
-1. projects created/modified by kubeflow install 
-1. pods per created/modified kubeflow project
-1. container images by pod per created/modified kubeflow projectt
-1. container image scan CVE report
+1. Manually query kubeflow containers/images 
+1. Automate queries using Prometheus/Grafana Operators 
+1. Scan for CVEs recurringly with Quay Security Operator
 
-## Procedure brief
+## Procedure
 This procedure should be used to create an automated reporting/scanning using OpenShift operators/tools.
-### Setup:
+### Setup
 Starting with a clean project, install Kubeflow using kfctl as it provides verbosity on install and is easier to query. This is not the "approved" way to install Kubeflow on OCP, but it is a way.
 
-1. Clean RHPDS Workshops (High-Cost Workloads) OCP 4.5/4.7
-1. ssh to bastion
-1. oc login to cluster from bastion
-1. wget https://github.com/kubeflow/kfctl/releases/download/v1.2.0/kfctl_v1.2.0-0-gbc038f9_linux.tar.gz
-1. tar -xf kfctl_v1.2.0-0-gbc038f9_linux.tar.gz
-1. sudo mv kfctl /usr/bin
-1. kfctl --version
+From a Clean RHPDS Workshops (High-Cost Workloads) OCP 4.5/4.7
+```
+# SSH to the jumpbox
+ssh to bastion
 
-### For Kubeflow manifest:
+# log into cluster as admin
+oc login to cluster from bastion
+
+# download the kfctl to deploy kubeflow manifest
+wget https://github.com/kubeflow/kfctl/releases/download/v1.2.0/kfctl_v1.2.0-0-gbc038f9_linux.tar.gz
+
+# unpacak the kfctl command
+tar -xf kfctl_v1.2.0-0-gbc038f9_linux.tar.gz
+
+# move kfctl command into path
+sudo mv kfctl /usr/bin
+
+# test kfctl command works
+kfctl --version
+```
+
+### Install
 There are several manifests to choose from that install different components. The latest release of Kubeflow 1.2 includes an OpenShift distribution that Red Hat owns for an opinionated installation of Kubeflow components on OpenShift.
 
-1. oc new-project kubeflow
-1. wget https://raw.githubusercontent.com/kubeflow/manifests/master/distributions/kfdef/kfctl_openshift.v1.2.0.yaml
-1. kfctl apply -f kfctl_openshift.v1.2.0.yaml -V | tee /tmp/kf-install-log-$(date +%Y%m%d%H%M)
-1. [success log](./kfctl-apply-success-output.log)
+```
+# create a new project to install kubeflow
+# MUST be named kubeflow
+oc new-project kubeflow
 
-# What projects are created/modified during Kubeflow Install
-1. kubeflow manually created
-1. istio-system created
-1. cert-manager unchanged
+# download the kubeflow manifest
+wget https://raw.githubusercontent.com/kubeflow/manifests/master/distributions/kfdef/kfctl_openshift.v1.2.0.yaml
 
-# List all container images in created/modified Kubeflow projects
-- Fetch all Pods in all namespaces using oc get pods -n {kubeflow, istio-system, ...}
-- Format the output to include only the list of Container image names using -o jsonpath={..image}. This will recursively parse out the image field from the returned json.
-- Format the output using standard tools: tr, sort, uniq
-  - tr to replace spaces with newlines
-  - sort to sort the results
-  - uniq to aggregate image counts
+# install kubeflow and log ouput
+kfctl apply -f kfctl_openshift.v1.2.0.yaml -V | tee /tmp/kf-install-log-$(date +%Y%m%d%H%M)
+```
 
-## kubeflow project pods
+# Analysis
+|Projects|`kubeflow`|`istio-system`|`cert-manager`|
+|-|-|-|-|
+|unique pods|30|20|4|
+
+## projects created/modified during Kubeflow Install
+1. `kubeflow` manually created
+1. `istio-system` created
+1. `cert-manager` unchanged
+### command: kubeflow project pods
 ```
 oc get pods -n kubeflow | wc -l; oc get pods -n kubeflow -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq -c
 ```
@@ -94,7 +100,7 @@ oc get pods -n kubeflow | wc -l; oc get pods -n kubeflow -o jsonpath="{..image}"
       2 quay.io/kubeflow/profile-controller:v1.1.0
       2 registry.redhat.io/rhscl/mysql-80-rhel7:latest
 ```
-## istio-system project pods
+### query: istio-system project pods
 ```
 oc get pods -n istio-system | wc -l; oc get pods -n istio-system -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq -c
 ```
@@ -112,7 +118,7 @@ oc get pods -n istio-system | wc -l; oc get pods -n istio-system -o jsonpath="{.
       2 docker.io/kiali/kiali:v0.16
       2 docker.io/prom/prometheus:v2.3.1
 ```
-## cert-manager project pods
+### query: cert-manager project pods
 ```
 oc get pods -n cert-manager | wc -l; oc get pods -n cert-manager -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq -c
 ```
@@ -125,63 +131,13 @@ oc get pods -n cert-manager | wc -l; oc get pods -n cert-manager -o jsonpath="{.
       2 quay.io/jetstack/cert-manager-webhook:v0.11.0 
 ```
 
-## All kubeflow created/modified project container images
+### query: kubeflow, istio-system, cert-manager project container images
 ```
 oc get pods -n kubeflow -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq;oc get pods -n istio-system -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq; oc get pods -n cert-manager -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq
 ```
+output omitted.
 
-**output**
-```
-argoproj/argoui:v2.3.0
-argoproj/workflow-controller:v2.3.0
-docker.io/argoproj/argoui:v2.3.0
-docker.io/argoproj/workflow-controller:v2.3.0
-docker.io/kubeflowkatib/katib-controller:v1beta1-a96ff59
-docker.io/kubeflowkatib/katib-db-manager:v1beta1-a96ff59
-docker.io/kubeflowkatib/katib-ui:v1beta1-a96ff59
-docker.io/library/mysql:8.0.3
-docker.io/metacontroller/metacontroller:v0.3.0
-docker.io/seldonio/seldon-core-operator:1.4.0
-gcr.io/kubeflow-images-public/centraldashboard:vmaster-g8097cfeb
-gcr.io/kubeflow-images-public/kfam:vmaster-g9f3bfd00
-gcr.io/kubeflow-images-public/kubernetes-sigs/application:1.0-beta
-gcr.io/kubeflow-images-public/notebook-controller:vmaster-g6eb007d0
-gcr.io/kubeflow-images-public/pytorch-operator:vmaster-g518f9c76
-gcr.io/kubeflow-images-public/tf_operator:vmaster-gda226016
-gcr.io/ml-pipeline/api-server:1.0.4
-gcr.io/ml-pipeline/cache-deployer:1.0.4
-gcr.io/ml-pipeline/cache-server:1.0.4
-gcr.io/ml-pipeline/envoy:metadata-grpc
-gcr.io/ml-pipeline/frontend:1.0.4
-gcr.io/ml-pipeline/metadata-writer:1.0.4
-gcr.io/ml-pipeline/minio:RELEASE.2019-08-14T20-37-41Z-license-compliance
-gcr.io/ml-pipeline/mysql:5.6
-gcr.io/ml-pipeline/persistenceagent:1.0.4
-gcr.io/ml-pipeline/scheduledworkflow:1.0.4
-gcr.io/ml-pipeline/viewer-crd-controller:1.0.4
-gcr.io/ml-pipeline/visualization-server:1.0.4
-gcr.io/tfx-oss-public/ml_metadata_store_server:v0.21.1
-metacontroller/metacontroller:v0.3.0
-mysql:8.0.3
-quay.io/kubeflow/jupyter-web-app:v1.0.0
-quay.io/kubeflow/profile-controller:v1.1.0
-registry.redhat.io/rhscl/mysql-80-rhel7:latest
-docker.io/istio/citadel:1.1.6
-docker.io/istio/galley:1.1.6
-docker.io/istio/kubectl:1.1.6
-docker.io/istio/mixer:1.1.6
-docker.io/istio/pilot:1.1.6
-docker.io/istio/proxyv2:1.1.6
-docker.io/istio/sidecar_injector:1.1.6
-docker.io/jaegertracing/all-in-one:1.9
-docker.io/kiali/kiali:v0.16
-docker.io/prom/prometheus:v2.3.1
-quay.io/jetstack/cert-manager-cainjector:v0.11.0
-quay.io/jetstack/cert-manager-controller:v0.11.0
-quay.io/jetstack/cert-manager-webhook:v0.11.0
-```
-
-## All kubeflow created/modified project container images by pod
+### query: kubeflow, istio-system, cert-manager project container images by pod
 ```
 oc get pods -n kubeflow -o=jsonpath='{range .items[*]}{"\n"}{.metadata.name}{":\t"}{range .spec.containers[*]}{.image}{", "}{end}{end}' | sort | uniq; oc get pods -n istio-system -o=jsonpath='{range .items[*]}{"\n"}{.metadata.name}{":\t"}{range .spec.containers[*]}{.image}{", "}{end}{end}' | sort | uniq; oc get pods -n cert-manager -o=jsonpath='{range .items[*]}{"\n"}{.metadata.name}{":\t"}{range .spec.containers[*]}{.image}{", "}{end}{end}' | sort | uniq
 ```
@@ -246,3 +202,83 @@ cert-manager-7c75b559c4-jdwgs:  quay.io/jetstack/cert-manager-controller:v0.11.0
 cert-manager-cainjector-7f964fd7b5-fwdth:       quay.io/jetstack/cert-manager-cainjector:v0.11.0, 
 cert-manager-webhook-566dd99d6-zc4zs:   quay.io/jetstack/cert-manager-webhook:v0.11.0, 
 ```
+
+# Prometheus and Grafana
+Monitor user-defined projects. 
+1. Create the cluster monitoring ConfigMap
+1. Create the user-defined workload monitoring ConfigMap
+1. For each
+   1. define the storage retention
+   1. configure the persistent storage
+   1. enable monitoring for user defined metrics
+
+## Create cluster monitoring ConfigMap
+Create the cluster-monitoring-config ConfigMap object in the openshift-monitoring project.
+
+![image](./images/ocp-web-console-monitor.png)
+
+```
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cluster-monitoring-config
+  namespace: openshift-monitoring
+data:
+  config.yaml: |
+    enableUserWorkload: true
+    prometheusK8s:
+    retention: 24h
+    prometheusK8s:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: gp2
+          resources:
+            requests:
+              storage: 20Gi
+```
+
+## Create user-defined monitoring ConfigMap
+Create the user-workload-monitoring-config ConfigMap object in the openshift-user-workload-monitoring project.
+
+![image](./images/ocp-web-console-user-monitor.png)
+
+```
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: user-workload-monitoring-config
+  namespace: openshift-user-workload-monitoring
+data:
+  config.yaml: |
+    enableUserWorkload: true
+    prometheus: 
+      volumeClaimTemplate:
+        spec:
+          storageClassName: gp2
+          resources:
+            requests:
+              storage: 20Gi
+    retention: 24h 
+    resources:
+      requests:
+        cpu: 200m 
+        memory: 2Gi 
+```
+
+### Check monitoring pods in the openshift-user-workload-monitoring namespace
+$ oc -n openshift-user-workload-monitoring get pod
+
+## PromQL Query
+From the web console:
+1. Monitoring
+1. Metrics
+1. In the expression field:
+```
+kube_pod_container_info{namespace="kubeflow"}
+```
+The page URL now contains the queries you ran. To use this set of queries again in the future, save this URL.
+
+## Grafana Dashboard
+https://www.redhat.com/en/blog/custom-grafana-dashboards-red-hat-openshift-container-platform-4
+
+# Quay Security Operator
